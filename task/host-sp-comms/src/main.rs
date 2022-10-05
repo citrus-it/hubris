@@ -43,6 +43,7 @@ enum Trace {
     ClearStatus { mask: u64 },
     SetState { now: u64, state: PowerState },
     JefeNotification { now: u64, state: PowerState },
+    Point { now: u64, point: u8 },
 }
 
 ringbuf!(Trace, 64, Trace::None);
@@ -257,14 +258,14 @@ impl ServerImpl {
             // Clear any RX overrun errors. If we hit this, we will likely fail
             // to decode the next message from the host, which will cause us to
             // send a `DecodeFailure` response.
-            if self.uart.check_and_clear_rx_overrun() {
-                ringbuf_entry!(Trace::UartRxOverrun);
-            }
+            //if self.uart.check_and_clear_rx_overrun() {
+                //ringbuf_entry!(Trace::UartRxOverrun);
+            //}
 
             // Receive until there's no more data or we get a 0x00, signifying
             // the end of a corncobs packet.
             while let Some(byte) = self.uart.try_rx_pop() {
-                ringbuf_entry!(Trace::UartRx(byte));
+                //ringbuf_entry!(Trace::UartRx(byte));
 
                 if byte == 0x00 {
                     // Process message and populate our response into
@@ -421,6 +422,11 @@ impl ServerImpl {
                 response_data = b"hello world";
                 Some(SpToHost::Phase2Data { start })
             }
+            HostToSp::BootStamp { point } => {
+                let now = sys_get_timer().now;
+                ringbuf_entry!(Trace::Point { now, point });
+                Some(SpToHost::Ack)
+            }
         };
 
         // We set the high bit of the sequence number before responding.
@@ -506,11 +512,11 @@ enum Action {
 // ringbuf
 fn try_tx_push(uart: &Usart, val: u8) -> bool {
     let ret = uart.try_tx_push(val);
-    if ret {
-        ringbuf_entry!(Trace::UartTx(val));
-    } else {
-        ringbuf_entry!(Trace::UartTxFull);
-    }
+    //if ret {
+    //    ringbuf_entry!(Trace::UartTx(val));
+    //} else {
+    //    ringbuf_entry!(Trace::UartTxFull);
+    //}
     ret
 }
 

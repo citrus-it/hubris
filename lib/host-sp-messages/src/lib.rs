@@ -86,6 +86,9 @@ pub enum HostToSp {
         start: u64, // units TBD
         count: u64,
     },
+    BootStamp {
+        point: u8,
+    },
 }
 
 /// The order of these cases is critical! We are relying on hubpack's encoding
