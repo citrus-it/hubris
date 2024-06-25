@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.21">
+<meta name="generator" content="Asciidoctor 2.0.23">
 <title>Hubris Reference</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -475,6 +475,10 @@ pre.rouge .nt {
 pre.rouge .gi {
   color: #116329;
   background-color: #dafbe1;
+}
+pre.rouge .ges {
+  font-weight: bold;
+  font-style: italic;
 }
 pre.rouge .kc {
   color: #0550ae;
@@ -3063,9 +3067,11 @@ any notifications enabled by the notification mask.</p>
 </div>
 <div class="paragraph">
 <p>During a closed receive, a task will receive messages only from the chosen task.
-The task will <strong>not</strong> receive notifications unless the chosen sender ID is the
-kernel&#8217;s task ID, <code>0xFFFF</code>. (This behavior is a little odd because it predates
-notification masks, and may change.)</p>
+The task will still receive any notifications set in its notification mask.</p>
+</div>
+<div class="paragraph">
+<p>To listen <strong>only</strong> for notifications, a task can perform a closed receive against
+the kernel&#8217;s task ID, <code>0xFFFF</code>.</p>
 </div>
 </div>
 <div class="sect4">
@@ -5626,7 +5632,7 @@ tool to a high-reliability research platform.</em></p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-03-21 13:34:38 UTC
+Last updated 2024-06-25 09:24:57 UTC
 </div>
 </div>
 </body>
